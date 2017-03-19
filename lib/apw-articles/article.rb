@@ -1,0 +1,3 @@
+class APWArticles::APWArticles
+
+end

@@ -1,0 +1,3 @@
+class APWArticles::CLI
+
+end
