@@ -5,28 +5,24 @@ require_relative '../apw-articles.rb'
 
 class APWArticles::Scraper
 
-  def self.scrape_list(category)
+  def self.scrape_list(category, page)
     # there are multiple pages of articles in each category, so we iterate up in the page count using variable i
-    i = 1
+    i = page
     # create an empty articles_list array to hold article hashes
     articles_list = []
     # maxing out at 3 pages of articles (this is a practical limit, as there don't appear to be more than that in a given category)
     # NOTE: probably I should only scrape for the # of articles I need for the given request / call - this is very laggy
-    until i == 4
+    until i == page+1
       # extract the page elements with class ".type-post" and iterate over them
       Nokogiri::HTML(open("https://apracticalwedding.com/category/marriage-essays/#{category}/page/#{i}/?listas=list")).css(".type-post").each do |post|
-        # create an article hash and add to it a title and url
-        article = {}
-        article[:title] = post.css("h2").text
-        article[:url] = post.css("a").attribute("href").value
-        # add the article hash to the articles_list array
-        articles_list << article
+        print "."
+        APWArticles::Article.new_from_url(post.css("a").attribute("href").value)
       end
       # iterate up
       i += 1
     end # until loop end
-    # return articles_list array
-    articles_list
+    binding.pry
+    APWArticles::Category.all.select {|c| c.name == category}
   end
 
   def self.scrape_article(url)
@@ -73,4 +69,4 @@ class APWArticles::Scraper
 
 end
 
-APWArticles::CLI.new.list_categories
+APWArticles::CLI.new.run

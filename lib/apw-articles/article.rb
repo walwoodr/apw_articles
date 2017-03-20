@@ -1,4 +1,4 @@
-class APWArticles::APWArticle
+class APWArticles::Article
   attr_accessor :title, :author, :blurb, :url, :categories
   @@all = []
 
