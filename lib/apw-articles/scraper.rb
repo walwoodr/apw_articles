@@ -26,13 +26,11 @@ class APWArticles::Scraper
     end # until loop end
     # return articles_list array
     articles_list
-    # NOTE: display title, scrape article using URL
   end
 
   def self.scrape_article(url)
     # create an empty hash about the article to populate using scraping of url in argument.
     article = {}
-    # NOTE: URL example: https://apracticalwedding.com/reclaiming-wife-new-mom-version/
     # extract html from the url in argument
     doc = Nokogiri::HTML(open(url))
     # add title, url and author to the hash
@@ -51,8 +49,6 @@ class APWArticles::Scraper
     article[:categories] = categories
     article
   end # returns hash of information on the article.
-
-  # NOTE: private ???
 
   def self.scrape_categories
     doc = Nokogiri::HTML(open("https://apracticalwedding.com/category/marriage-essays/?listas=list")).css(".type-post")

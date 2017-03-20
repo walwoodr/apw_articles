@@ -8,7 +8,6 @@ class APWArticles::APWArticles
       if key == :categories
         values.each do |category|
           self.categories << APWArticles::Category.find_or_create_by_url(category)
-          # NOTE: this depends on find_or_create_by_url returning an object
           # NOTE: this is a many:many relationship--may cause problems
         end
       else
