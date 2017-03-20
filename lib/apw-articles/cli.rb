@@ -9,7 +9,7 @@ class APWArticles::CLI
   end # shell of functionality
 
   def list_categories
-    puts "------------A Practical Wedding - Marriage Essays------------"
+    puts "------------ A Practical Wedding - Marriage Essays ------------"
     puts "CATEGORIES:"
     # populate the list using scrape_list
     APWArticles::Scraper.scrape_categories
@@ -25,17 +25,21 @@ class APWArticles::CLI
       input = gets.strip
     end
     # once the input is acceptable, display article list based on number
-    self.list_articles_in_category_by_page(APWArticles::Category.all[input.to_i-1].url, 1)
+    self.list_articles_in_category_by_page(APWArticles::Category.all[input.to_i-1], 1)
   end # list the categories available
 
   def list_articles_in_category_by_page(category, page = 1)
     # from page, generate an array of indexes, page 1 = 0-9, page 2 =  10-19, page 3 = 20-29 etc
-    articles_list = APWArticles::Scraper.scrape_list(category) # this returns articles_list which consists of the title and URL of each article
-    articles_to_display = Array (((page*10)-10)..((page*10)-1)
+    articles_to_display = Array (((page*10)-10)..((page*10)-1))
+    puts "------------ Articles in #{category.name} ------------"
+    articles_list = APWArticles::Scraper.scrape_list(category.url) # this returns articles_list which consists of the title and URL of each article
+    # for each item in the articles_to_display array, print the article at that index, and the article's title.
     articles_to_display.each do |article_num|
-      puts "#{article_num}. #{articles_list[article_num].title}"
+      puts "#{article_num+1}. #{articles_list[article_num][:title]}"
     end
-    # have them type "next" to display the next page, which iterates page up one and then calls this method again. 
+    binding.pry
+    puts "Type the article number to view more information about the article. \n Type 'next' to view the next page of articles."
+    # have them type "next" to display the next page, which iterates page up one and then calls this method again.
   end
 
   def article_information
