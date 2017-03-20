@@ -37,13 +37,30 @@ class APWArticles::CLI
     articles_to_display.each do |article_num|
       puts "#{article_num+1}. #{articles_list[article_num][:title]}"
     end
-    binding.pry
+    # ask for input
     puts "Type the article number to view more information about the article. \n Type 'next' to view the next page of articles."
-    # have them type "next" to display the next page, which iterates page up one and then calls this method again.
+    input = gets.strip
+    # validate input.
+    until /(?i)next/ === input || input.to_i == articles_to_display[0] || input.to_i == articles_to_display[-1]
+      "Please type a number between #{articles_to_display[0]} and #{articles_to_display[-1]} or type 'next'."
+      input = gets.strip
+    end
+    # if the input is next,
+    if /(?i)next/ === input
+      # iterates var page up one and then calls this method again.
+      page += 1
+      list_articles_in_category_by_page(category, page)
+    else # if the input is a number in the range.
+      self.article_information(articles_list[article_num][:url])
+      # call the article_information method using the # to reference the article URL to scrape.
+      # NOTE : does the category object have the article information at this point?
+    end
   end
 
-  def article_information
-    # display article information by
+  def article_information(article) #URL?
+    # display article information
+    # offer to return to the article list page for any category that this article has
+    # offer to return to category list page
   end # list article information
 
 end
