@@ -5,6 +5,7 @@ class APWArticles::CLI
   end # shell of functionality
 
   def list_categories
+    # list the categories by calling APWArticles::Category.all
 
   end # list the categories available
 

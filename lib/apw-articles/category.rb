@@ -1,9 +1,10 @@
 class APWArticles::Category
-  attr_accessor :name, :articles
+  attr_accessor :name, :articles, :url
   @@all = []
 
-  def initialize(name = nil)
-    self.name = name
+  def initialize(url)
+    self.name = url.gsub(/-/, ' ').split.map(&:capitalize).join(' ')
+    self.url = url
     self.class.all << self
     self.articles = []
   end
@@ -12,9 +13,9 @@ class APWArticles::Category
     @@all
   end
 
-  def self.find_or_create_by_name(name)
-    if self.all.detect{|category| category.name == name } == nil
-      self.new(name)
+  def self.find_or_create_by_name(url)
+    if self.all.detect{|category| category.url == url } == nil
+      self.new(url)
     else
 
     end

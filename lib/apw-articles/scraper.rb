@@ -32,6 +32,7 @@ class APWArticles::Scraper
       end # attributes_array do end
     end # link_attributes do end
     APWArticles::Category.all
+    binding.pry
   end # self.scrape_categories end
 
 end
