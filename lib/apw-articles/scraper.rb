@@ -23,11 +23,11 @@ class APWArticles::Scraper
       attributes_array = attributes_list.split(/ category-/)
       attributes_array.slice!(0)
       attributes_array.each do |category|
-        APWArticles::Category.find_or_create_by_name(category)
+        APWArticles::Category.find_or_create_by_name(category.split[0])
       end # attributes_array do end
     end # link_attributes do end
     APWArticles::Category.all
-    binding.pry
+    # binding.pry
   end # self.scrape_categories end
 
 end
