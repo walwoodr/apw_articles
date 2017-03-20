@@ -1,6 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
-# require 'pry'
+require 'pry'
 require_relative '../apw-articles.rb'
 
 class APWArticles::Scraper
@@ -75,3 +75,5 @@ class APWArticles::Scraper
   end # self.scrape_categories end
 
 end
+
+APWArticles::CLI.new.list_categories
