@@ -53,26 +53,24 @@ class APWArticles::Scraper
     article
   end # returns hash of information on the article.
 
-  def self.scrape_categories
-    doc = Nokogiri::HTML(open("https://apracticalwedding.com/category/marriage-essays/?listas=list")).css(".type-post")
+  # This method takes in a URL of a list page of essays at APW and creates an array of all link attributes on the essay links in the list. It then breaks apart the string of link attributes and returns an array of those attributes with the preface "category-",
+  def self.scrape_categories(url = "https://apracticalwedding.com/category/marriage-essays/?listas=list")
+    doc = Nokogiri::HTML(open(url)).css(".type-post")
     link_attributes = []
+    categories = []
     doc.each { |link| link_attributes << link.attribute("class").value }
-    # at this point link_attributes is an array with long strings of link attributes separated by spaces.
     link_attributes.each do |attributes_list|
-      # class attributes that are categories are in the format "category-advice", so split using the preface
       attributes_array = attributes_list.split(/ category-/)
-      # all non-category class attributes are at the beginning, so we can remove just the first item in the array to return categories
       attributes_array.slice!(0)
-      # with each category class attribute, create a category object
-      # NOTE: should this not be in here? It should probably be in the category class...
       attributes_array.each do |category|
-        # create only unique categories, and only include the first attribute (some have "tag-something-else" at the very end)
-        APWArticles::Category.find_or_create_by_url(category.split[0])
+        categories << category.split[0]
       end # attributes_array do end
     end # link_attributes do end
-    APWArticles::Category.all
+    categories.uniq
   end # self.scrape_categories end
 
 end
+
+APWArticles::Category.create_from_url
 
 APWArticles::CLI.new.run
