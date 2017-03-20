@@ -18,7 +18,7 @@ class APWArticles::Category
       self.new(url)
     else
       self.all.detect{|category| category.url == url }
-    end #verify this returns an object
+    end # NOTE verify this returns an object
   end
 
 end

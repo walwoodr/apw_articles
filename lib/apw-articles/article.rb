@@ -9,6 +9,7 @@ class APWArticles::APWArticles
         values.each do |category|
           self.categories << APWArticles::Category.find_or_create_by_url(category)
           # NOTE: this depends on find_or_create_by_url returning an object
+          self.category.articles << self
           # NOTE: this is a many:many relationship--may cause problems
         end
       else
