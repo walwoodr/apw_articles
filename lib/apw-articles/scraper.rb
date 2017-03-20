@@ -1,6 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
-require 'pry'
+# require 'pry'
 require_relative '../apw-articles.rb'
 
 class APWArticles::Scraper
@@ -30,20 +30,27 @@ class APWArticles::Scraper
   end
 
   def self.scrape_article(url)
+    # create an empty hash about the article to populate using scraping of url in argument.
     article = {}
     # NOTE: URL example: https://apracticalwedding.com/reclaiming-wife-new-mom-version/
+    # extract html from the url in argument
     doc = Nokogiri::HTML(open(url))
+    # add title, url and author to the hash
     article[:title] = doc.css("h1 .title").text
     article[:author] = doc.css("h2 .author-list").text
+    article[:url] = url
+    # add blurb to the hash, blurb is first 200 characters of the article
     article[:blurb] = doc.css(".entry p")[0].text[0,200]
+    # create an empty array of categories
     categories = []
+    # for each category on the page, add the tail end of the URL to the categories array
     doc.css(".categories a").each do |link|
       categories << link.attribute("href").value.split("/")[-1]
     end
+    # add the categories array to the hash using the key :categories
     article[:categories] = categories
-    article[:url] = url
     article
-  end # NOTE: I want this to return article information given an article URL in the format "title, blurb, url, categories, author(optional)"
+  end # returns hash of information on the article.
 
   # NOTE: private ???
 
@@ -68,5 +75,3 @@ class APWArticles::Scraper
   end # self.scrape_categories end
 
 end
-
-APWArticles::Scraper.scrape_list("kids-no-kids")
