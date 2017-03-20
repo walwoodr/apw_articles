@@ -65,7 +65,7 @@ class APWArticles::CLI
     # display article information
     puts "\nTitle: #{article.title}"
     puts "\nAuthor: #{article.author}"
-    puts "\n\nBlurb: #{article.blurb}..."
+    puts "\n\nBlurb: \"#{article.blurb}...\""
     puts "\nURL: #{article_url}"
     # create an article_categories array and join that array
     article_categories = []
@@ -73,11 +73,18 @@ class APWArticles::CLI
       article_categories << category.name
     end
     puts "\nCategories: #{article_categories.join(", ")}."
-    puts "To view more articles, type a category name above or type 'list' to return to the category list page. To exit, type 'exit'"
-    gets.strip 
-    # offer to return to the article list page for any category that this article has
-    # offer to return to category list page
-    # offer an exit option
+    puts "Type 'list' to return to the category list page. To exit, type 'exit'"
+    input = gets.strip
+    # validating input
+    until /(?i)exit/ === input || /(?i)list/ === input
+      puts "Please type 'list' or 'exit'."
+      input = gets.strip
+    end
+    if /(?i)exit/ === input
+      abort("Thank you.")
+    elsif /(?i)list/ === input
+      self.list_categories
+    end
   end # list article information
 
 end
