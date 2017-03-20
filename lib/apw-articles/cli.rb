@@ -57,7 +57,18 @@ class APWArticles::CLI
     end
   end
 
-  def article_information(article) #URL?
+  def article_information(article_url)
+    article = APWArticles::APWArticle.new_from_url(article_url)
+    puts "Title: #{article.title}"
+    puts "Author: #{article.author}"
+    puts "Blurb: #{article.blurb}"
+    puts "URL: #{article_url}"
+    article_categories = []
+    article.categories.each do |category| # category is an object, and I want its name
+      article_categories << category.name
+    end
+    article_categories.join(", ")
+    puts "Categories: #{article_categories}."
     # display article information
     # offer to return to the article list page for any category that this article has
     # offer to return to category list page

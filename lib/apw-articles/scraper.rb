@@ -11,6 +11,7 @@ class APWArticles::Scraper
     # create an empty articles_list array to hold article hashes
     articles_list = []
     # maxing out at 3 pages of articles (this is a practical limit, as there don't appear to be more than that in a given category)
+    # NOTE: probably I should only scrape for the # of articles I need for the given request / call - this is very laggy
     until i == 4
       # extract the page elements with class ".type-post" and iterate over them
       Nokogiri::HTML(open("https://apracticalwedding.com/category/marriage-essays/#{category}/page/#{i}/?listas=list")).css(".type-post").each do |post|
