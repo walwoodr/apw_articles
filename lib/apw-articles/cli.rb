@@ -12,7 +12,7 @@ class APWArticles::CLI
     puts "------------ A Practical Wedding - Marriage Essays ------------\n"
     puts "CATEGORIES:"
     # populate the list using scrape_list
-    APWArticles::Scraper.scrape_categories
+    APWArticles::Category.defaults
     # display the list by iterating over APWARrticles::Category.all
     APWArticles::Category.all.each_with_index do |category, index|
       puts "#{index+1}.\t#{category.name}"
