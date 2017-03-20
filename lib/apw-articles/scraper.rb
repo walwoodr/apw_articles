@@ -7,22 +7,39 @@ class APWArticles::Scraper
 
   def self.scrape_list(category, page)
     # there are multiple pages of articles in each category, so we iterate up in the page count using variable i
-    i = page
-    # create an empty articles_list array to hold article hashes
-    articles_list = []
-    # maxing out at 3 pages of articles (this is a practical limit, as there don't appear to be more than that in a given category)
-    # NOTE: probably I should only scrape for the # of articles I need for the given request / call - this is very laggy
-    until i == page+1
+    # OKAY so   i is 1 AND until i > 1 if the array_of_indices includes 0 - 65 (page 1-5)
+    #           i is 1 AND until i > 2 if page 6
+    #           i is 2 AND until i > 2 if the array_of_indices includes 66 - 131
+    #           i is 2 AND until i > 3 if page 13
+    #           i is 3 AND until i > 3 if the array_of_indices includes 132 - 197
+    i = 1
+    # if /[1-6]/ === page
+    #   i = 1
+    # elsif /|7|8|9|10|11|12|13/ === page
+    #   i = 2
+    # else
+    #   i = 3
+    # end
+    # # NOTE: probably I should only scrape for the # of articles I need for the given request / call - this is very laggy
+    # if /6|7|8|9|10|11|12/ === page
+    #   j = 2
+    # elsif /[1-5]/ === page
+    #   j = 1
+    # else
+    #   j = 3
+    # end
+    until i > 3
       # extract the page elements with class ".type-post" and iterate over them
       Nokogiri::HTML(open("https://apracticalwedding.com/category/marriage-essays/#{category}/page/#{i}/?listas=list")).css(".type-post").each do |post|
         print "."
-        APWArticles::Article.new_from_url(post.css("a").attribute("href").value)
+
+        APWArticles::Article.new({url: post.css("a").attribute("href").value, title: post.css("h1").text, categories: [category]})
       end
       # iterate up
       i += 1
     end # until loop end
     binding.pry
-    APWArticles::Category.all.select {|c| c.name == category}
+    APWArticles::Category.all.select {|c| c.url == category}
   end
 
   def self.scrape_article(url)

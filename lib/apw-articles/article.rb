@@ -16,6 +16,7 @@ class APWArticles::Article
       else
         self.send(("#{key}="), value)
       end
+      @@all << self
     end
   end
 
