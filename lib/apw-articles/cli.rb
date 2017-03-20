@@ -11,23 +11,34 @@ class APWArticles::CLI
   def list_categories
     puts "------------A Practical Wedding - Marriage Essays------------"
     puts "CATEGORIES:"
+    # populate the list using scrape_list
+    APWArticles::Scraper.scrape_list
+    # display the list by iterating over APWARrticles::Category.all
     APWArticles::Category.all.each_with_index do |category, index|
       puts "#{index+1}. #{category.name}"
     end
-    puts "Please choose a category by number or title."
+    puts "Please choose a category by number"
     input = gets.strip
-    if input.to_i == 0
-      # compare for words
-      # display article based on word
-    elsif input.to_i > 0
-      # compare for numbers
-      # display article based on number
+    # request new input until the input to integer is more than 0 (not a string) and less than the total number of categories
+    until input.to_i > 0 && input.to_i < APWArticles::Category.all.size
+      puts "Please type a number between 1 and #{APWArticles::Category.all.size}."
+      input = gets.strip
     end
+    # once the input is acceptable, display article list based on number
+    self.list_articles_in_category(APWArticles::Category.all[input.to_i-1].url)
   end # list the categories available
 
-  def list_articles_in_category
-    # I'll probably want to do this only a few at a time
-  end # list articles in a category
+  def list_articles_in_category(category)
+    
+    # use the page argument to display 1-10
+
+  end
+
+  def list_articles_in_category_by_page(category, page = 1)
+
+    # use the page argument to display 1-10, 11-20, etc
+
+  end
 
   def article_information
     # display article information by
