@@ -13,12 +13,12 @@ class APWArticles::Category
     @@all
   end
 
-  def self.find_or_create_by_name(url)
+  def self.find_or_create_by_url(url)
     if self.all.detect{|category| category.url == url } == nil
       self.new(url)
     else
-
-    end
+      self.all.detect{|category| category.url == url }
+    end #verify this returns an object
   end
 
 end
