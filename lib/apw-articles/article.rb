@@ -14,10 +14,11 @@ class APWArticles::APWArticles
       else
         self.send(("#{key}="), value)
       end
+    end
   end
 
   def self.new_from_url(url)
-    
+    self.new(APWArticles::Scraper(url))
   end
 
   def self.new_from_list(list_url)

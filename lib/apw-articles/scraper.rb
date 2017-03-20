@@ -5,9 +5,29 @@ require_relative '../apw-articles.rb'
 
 class APWArticles::Scraper
 
-  def self.scrape_list(url, category)
-      # NOTE: URL example: https://apracticalwedding.com/category/marriage-essays/kids-no-kids/page/2/?listas=list
-  end # NOTE: I want this to return a hash of articles in a given category (kids-no-kids is a category in the url above)
+  def self.scrape_list(category)
+    # there are multiple pages of articles in each category, so we iterate up in the page count using variable i
+    i = 1
+    # create an empty articles_list array to hold article hashes
+    articles_list = []
+    # maxing out at 3 pages of articles (this is a practical limit, as there don't appear to be more than that in a given category)
+    until i == 4
+      # extract the page elements with class ".type-post" and iterate over them
+      Nokogiri::HTML(open("https://apracticalwedding.com/category/marriage-essays/#{category}/page/#{i}/?listas=list")).css(".type-post").each do |post|
+        # create an article hash and add to it a title and url
+        article = {}
+        article[:title] = post.css("h2").text
+        article[:url] = post.css("a").attribute("href").value
+        # add the article hash to the articles_list array
+        articles_list << article
+      end
+      # iterate up
+      i += 1
+    end # until loop end
+    # return articles_list array
+    articles_list
+    # NOTE: display title, scrape article using URL
+  end
 
   def self.scrape_article(url)
     article = {}
@@ -49,4 +69,4 @@ class APWArticles::Scraper
 
 end
 
-APWArticles::Scraper.scrape_article("https://apracticalwedding.com/reclaiming-wife-new-mom-version/")
+APWArticles::Scraper.scrape_list("kids-no-kids")
