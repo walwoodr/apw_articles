@@ -62,19 +62,19 @@ class APWArticles::CLI
   def article_information(article_url)
     # create a local variable for the article object
     article = APWArticles::APWArticle.new_from_url(article_url)
-    binding.pry
     # display article information
-    puts "Title: #{article.title}"
-    puts "Author: #{article.author}"
-    puts "Blurb: #{article.blurb}"
-    puts "URL: #{article_url}"
+    puts "\nTitle: #{article.title}"
+    puts "\nAuthor: #{article.author}"
+    puts "\n\nBlurb: #{article.blurb}..."
+    puts "\nURL: #{article_url}"
     # create an article_categories array and join that array
     article_categories = []
     article.categories.each do |category| # category is an object, and I want its name
       article_categories << category.name
     end
-    article_categories.join(", ")
-    puts "Categories: #{article_categories}."
+    puts "\nCategories: #{article_categories.join(", ")}."
+    puts "To view more articles, type a category name above or type 'list' to return to the category list page. To exit, type 'exit'"
+    gets.strip 
     # offer to return to the article list page for any category that this article has
     # offer to return to category list page
     # offer an exit option

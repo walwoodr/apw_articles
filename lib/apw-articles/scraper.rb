@@ -37,11 +37,11 @@ class APWArticles::Scraper
     # extract html from the url in argument
     doc = Nokogiri::HTML(open(url))
     # add title, url and author to the hash
-    article[:title] = doc.css("h1 .title").text
-    article[:author] = doc.css("h2 .author-list").text
+    article[:title] = doc.css("h1").text
+    article[:author] = doc.css(".staff-info h2").text
     article[:url] = url
     # add blurb to the hash, blurb is first 200 characters of the article
-    article[:blurb] = doc.css(".entry p")[0].text[0,200]
+    article[:blurb] = doc.css(".entry p").text[0,400]
     # create an empty array of categories
     categories = []
     # for each category on the page, add the tail end of the URL to the categories array
