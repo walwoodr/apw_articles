@@ -19,15 +19,19 @@ class APWArticles::Scraper
     doc = Nokogiri::HTML(open("https://apracticalwedding.com/category/marriage-essays/?listas=list")).css(".type-post")
     link_attributes = []
     doc.each { |link| link_attributes << link.attribute("class").value }
+    # at this point link_attributes is an array with long strings of link attributes separated by spaces.
     link_attributes.each do |attributes_list|
+      # class attributes that are categories are in the format "category-advice", so split using the preface
       attributes_array = attributes_list.split(/ category-/)
+      # all non-category class attributes are at the beginning, so we can remove just the first item in the array to return categories
       attributes_array.slice!(0)
+      # with each category class attribute, create a category object
       attributes_array.each do |category|
+        # create only unique categories, and only include the first attribute (some have "tag-something-else" at the very end)
         APWArticles::Category.find_or_create_by_name(category.split[0])
       end # attributes_array do end
     end # link_attributes do end
     APWArticles::Category.all
-    # binding.pry
   end # self.scrape_categories end
 
 end
