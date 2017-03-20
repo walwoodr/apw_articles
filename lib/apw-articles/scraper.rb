@@ -6,13 +6,6 @@ require_relative '../apw-articles.rb'
 class APWArticles::Scraper
 
   def self.scrape_list(category, page = 1)
-    # there are multiple pages of articles in each category, so we iterate up in the page count using variable i
-    # OKAY so   i is 1 AND until i > 1 if the array_of_indices includes 0 - 65 (page 1-5)
-    #           i is 1 AND until i > 2 if page 6
-    #           i is 2 AND until i > 2 if the array_of_indices includes 66 - 131
-    #           i is 2 AND until i > 3 if page 13
-    #           i is 3 AND until i > 3 if the array_of_indices includes 132 - 197
-    # i = 1
     # # NOTE: probably I should only scrape for the # of articles I need for the given request / call - this is very laggy
     if page.between?(1,6)
       i = 1
@@ -31,9 +24,7 @@ class APWArticles::Scraper
     until i > j
       # extract the page elements with class ".type-post" and iterate over them
       Nokogiri::HTML(open("https://apracticalwedding.com/category/marriage-essays/#{category}/page/#{i}/?listas=list")).css(".type-post").each do |post|
-        print "."
-
-        APWArticles::Article.new({url: post.css("a").attribute("href").value, title: post.css("h1").text, categories: [category]})
+        APWArticles::Article.new({url: post.css("a").attribute("href").value, title: post.css("h2").text, categories: [category]})
       end
       i += 1
     end # until loop end

@@ -30,14 +30,13 @@ class APWArticles::CLI
     # from page, generate an array of indexes, page 1 = 0-9, page 2 =  10-19, page 3 = 20-29 etc
     articles_to_display = Array (((page*10)-10)..((page*10)-1))
     puts "\n\n------------ Articles in #{category.name} ------------"
-    articles_list = APWArticles::Scraper.scrape_list(category.url, page) # this returns articles_list which consists of the title and URL of each article
-    APWArticles::Scraper.scrape_list(category.url, page)
-    APWArticles::Category.all.select {|c| c.url == category}
-    # NOTE this is very laggy and should probably not take place here. perhaps create list_articles_in_category that calls this for subsequent pages like I was originally thinking?
+    APWArticles::Scraper.scrape_list(category.url, page) unless page.between?(2,5) || page.between?(7,12)
+    # NOTE this is very laggy and perhaps shouldn't take place here.
     # for each item in the articles_to_display array, print the article at that index, and the article's title.
-    # binding.pry
     articles_to_display.each do |article_num|
-      puts "#{article_num+1}.\t#{articles_list[article_num][:title]}" unless articles_list[article_num] == nil
+      puts "#{article_num+1}.\t#{
+      category.articles[article_num].title}" unless
+      category.articles[article_num] == nil
     end
     # ask for input
     puts "\n\nType the article number to view more information about the article. \nOr type 'next' to view the next page of articles."
@@ -53,7 +52,8 @@ class APWArticles::CLI
       page += 1
       list_articles_in_category_by_page(category, page)
     else # if the input is a number in the range.
-      self.article_information(articles_list[input.to_i-1][:url])
+      self.article_information(
+      category.articles[input.to_i-1].url)
       # call the article_information method using the # to reference the article URL to scrape.
       # NOTE : does the category object have the article information at this point?
     end
