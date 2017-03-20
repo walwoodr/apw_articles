@@ -1,4 +1,4 @@
-class APWArticles::APWArticles
+class APWArticles::APWArticle
   attr_accessor :title, :author, :blurb, :url, :categories
   @@all = []
 
@@ -6,8 +6,11 @@ class APWArticles::APWArticles
     self.categories = []
     attribute_hash.each do |key, value|
       if key == :categories
-        values.each do |category|
-          self.categories << APWArticles::Category.find_or_create_by_url(category)
+        value.each do |category|
+          c = APWArticles::Category.find_or_create_by_url(category)
+          self.categories << c
+          # NOTE: this depends on find_or_create_by_url returning an object
+          c.articles << self
           # NOTE: this is a many:many relationship--may cause problems
         end
       else
@@ -17,7 +20,7 @@ class APWArticles::APWArticles
   end
 
   def self.new_from_url(url)
-    self.new(APWArticles::Scraper(url))
+    self.new(APWArticles::Scraper.scrape_article(url))
   end
 
   def self.new_from_list(list_url)

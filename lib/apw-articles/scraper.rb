@@ -1,6 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
-# require 'pry'
+require 'pry'
 require_relative '../apw-articles.rb'
 
 class APWArticles::Scraper
@@ -11,6 +11,7 @@ class APWArticles::Scraper
     # create an empty articles_list array to hold article hashes
     articles_list = []
     # maxing out at 3 pages of articles (this is a practical limit, as there don't appear to be more than that in a given category)
+    # NOTE: probably I should only scrape for the # of articles I need for the given request / call - this is very laggy
     until i == 4
       # extract the page elements with class ".type-post" and iterate over them
       Nokogiri::HTML(open("https://apracticalwedding.com/category/marriage-essays/#{category}/page/#{i}/?listas=list")).css(".type-post").each do |post|
@@ -34,11 +35,11 @@ class APWArticles::Scraper
     # extract html from the url in argument
     doc = Nokogiri::HTML(open(url))
     # add title, url and author to the hash
-    article[:title] = doc.css("h1 .title").text
-    article[:author] = doc.css("h2 .author-list").text
+    article[:title] = doc.css("h1").text
+    article[:author] = doc.css(".staff-info h2").text
     article[:url] = url
     # add blurb to the hash, blurb is first 200 characters of the article
-    article[:blurb] = doc.css(".entry p")[0].text[0,200]
+    article[:blurb] = doc.css(".entry p").text[0,400]
     # create an empty array of categories
     categories = []
     # for each category on the page, add the tail end of the URL to the categories array
@@ -71,3 +72,5 @@ class APWArticles::Scraper
   end # self.scrape_categories end
 
 end
+
+APWArticles::CLI.new.list_categories
