@@ -24,7 +24,7 @@ class APWArticles::Category
       self.new(url)
     else
       self.all.detect{|category| category.url == url }
-    end # NOTE verify this returns an object
+    end
   end
 
   def self.create_from_url

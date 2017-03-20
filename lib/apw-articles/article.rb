@@ -9,9 +9,7 @@ class APWArticles::Article
         value.each do |category|
           c = APWArticles::Category.find_or_create_by_url(category)
           self.categories << c
-          # NOTE: this depends on find_or_create_by_url returning an object
           c.articles << self
-          # NOTE: this is a many:many relationship--may cause problems
         end
       else
         self.send(("#{key}="), value)

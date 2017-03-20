@@ -3,6 +3,7 @@ class APWArticles::CLI
   def run
     APWArticles::Category.defaults
     self.list_categories
+    APWArticles::Scraper.
     # then display article information
     # allow user to go back to category list for any category in article
     # or go back to list of categories.
@@ -55,7 +56,6 @@ class APWArticles::CLI
       self.article_information(
       category.articles[input.to_i-1].url)
       # call the article_information method using the # to reference the article URL to scrape.
-      # NOTE : does the category object have the article information at this point?
     end
   end
 
