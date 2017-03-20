@@ -31,6 +31,8 @@ class APWArticles::CLI
     articles_to_display = Array (((page*10)-10)..((page*10)-1))
     puts "\n\n------------ Articles in #{category.name} ------------"
     articles_list = APWArticles::Scraper.scrape_list(category.url, page) # this returns articles_list which consists of the title and URL of each article
+    APWArticles::Scraper.scrape_list(category.url, page)
+    APWArticles::Category.all.select {|c| c.url == category}
     # NOTE this is very laggy and should probably not take place here. perhaps create list_articles_in_category that calls this for subsequent pages like I was originally thinking?
     # for each item in the articles_to_display array, print the article at that index, and the article's title.
     # binding.pry
