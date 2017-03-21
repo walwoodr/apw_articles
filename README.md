@@ -4,11 +4,11 @@ A Ruby Gem to explore articles on the A Practical Wedding website that are usefu
 
 ## Installation
 
-
+`$ gem install apw_articles`
 
 ## Usage
 
-
+`$ APWArticles::CLI.new.run`
 
 ## Development
 
