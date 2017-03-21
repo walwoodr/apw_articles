@@ -3,10 +3,7 @@ class APWArticles::CLI
   def run
     APWArticles::Category.defaults
     self.list_categories
-    # then display article information
-    # allow user to go back to category list for any category in article
-    # or go back to list of categories.
-  end # shell of functionality
+  end # basic functionality
 
   # Lists categories by iterating over APWARrticles::Category.all and requests input to view article list based on category
   def list_categories
@@ -77,5 +74,5 @@ class APWArticles::CLI
       self.list_categories
     end # if end
   end # def article_information end
-  
+
 end # class end

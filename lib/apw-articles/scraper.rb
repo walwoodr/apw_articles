@@ -5,6 +5,7 @@ require_relative '../apw-articles.rb'
 
 class APWArticles::Scraper
 
+  # This class method defines variables i and j to determine what url number needs to be scraped based on the number of items on each page (at time of publicaion, 66 articles/page). The method then scrapes a url based on the category and URL number and uses that page's list of articles to creates a new article object per article link. Article objects include title, url and category. The method returns nil
   def self.scrape_list(category, page = 1)
     # NOTE: probably I should only scrape for the # of articles I need for the given request / call - this is very laggy
     i = 1 if page.between?(1,6)
@@ -14,33 +15,26 @@ class APWArticles::Scraper
     j = 2 if page.between?(6,12)
     j = 3 if page > 12
     until i > j
-      # extract the page elements with class ".type-post" and iterate over them
       Nokogiri::HTML(open("https://apracticalwedding.com/category/marriage-essays/#{category}/page/#{i}/?listas=list")).css(".type-post").each do |post|
         APWArticles::Article.new({url: post.css("a").attribute("href").value, title: post.css("h2").text, categories: [category]})
-      end
+      end # do end
       i += 1
     end # until loop end
     nil
-  end
+  end # def end
 
+  # This method takes an article URL, creates an article hash then populates that article hash using information scraped from the URL. The method then returns the article hash.
   def self.scrape_article(url)
-    # create an empty hash about the article to populate using scraping of url in argument.
     article = {}
-    # extract html from the url in argument
     doc = Nokogiri::HTML(open(url))
-    # add title, url and author to the hash
     article[:title] = doc.css("h1").text
     article[:author] = doc.css(".staff-info h2").text
     article[:url] = url
-    # add blurb to the hash, blurb is first 200 characters of the article
     article[:blurb] = doc.css(".entry p").text[0,400]
-    # create an empty array of categories
     categories = []
-    # for each category on the page, add the tail end of the URL to the categories array
     doc.css(".categories a").each do |link|
       categories << link.attribute("href").value.split("/")[-1]
-    end
-    # add the categories array to the hash using the key :categories
+    end # do end
     article[:categories] = categories
     article
   end # returns hash of information on the article.
