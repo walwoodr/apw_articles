@@ -2,19 +2,13 @@ class APWArticles::Scraper
 
   # This class method defines variables i and j to determine what url number needs to be scraped based on the number of items on each page (at time of publicaion, 66 articles/page). The method then scrapes a url based on the category and URL number and uses that page's list of articles to creates a new article object per article link. Article objects include title, url and category. The method returns nil
   def self.scrape_list(category, page = 1)
-    # NOTE: probably I should only scrape for the # of articles I need for the given request / call - this is very laggy
-    i = 1 if page.between?(1,6)
-    i = 2 if page.between?(7,13)
-    i = 3 if page > 13
-    j = 1 if page.between?(1,5)
-    j = 2 if page.between?(6,12)
-    j = 3 if page > 12
-    until i > j
-      Nokogiri::HTML(open("https://apracticalwedding.com/category/marriage-essays/#{category}/page/#{i}/?listas=list")).css(".type-post").each do |post|
+    # binding.pry
+    category.create_category_urls(page = 1).each do |url|
+      Nokogiri::HTML(open(url)).css(".type-post").each do |post|
+        # NOTE: should this be done in article creation
         APWArticles::Article.new({url: post.css("a").attribute("href").value, title: post.css("h2").text, categories: [category]})
-      end # do end
-      i += 1
-    end # until loop end
+      end # do post end
+    end # do url end
     nil
   end # def end
 

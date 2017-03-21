@@ -27,7 +27,7 @@ class APWArticles::CLI
   def list_articles_in_category_by_page(category, page = 1)
     articles_to_display = Array (((page*10)-10)..((page*10)-1)) # page 1 = 0-9, page 2 = 10-19
     puts "\n\n------------ Articles in #{category.name} ------------".colorize(:cyan)
-    APWArticles::Scraper.scrape_list(category.url, page) unless page.between?(2,5) || page.between?(7,12)
+    APWArticles::Scraper.scrape_list(category, page) unless page.between?(2,5) || page.between?(7,12)
     # NOTE this is very laggy and perhaps shouldn't take place here.
     articles_to_display.each do |article_num|
       print "#{article_num+1}.\t".colorize(:cyan) unless
