@@ -3,8 +3,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'colorize'
 
-
-require_relative '../lib/apw-articles/article'
-require_relative '../lib/apw-articles/category'
-require_relative '../lib/apw-articles/cli'
-require_relative '../lib/apw-articles/scraper'
+require_relative '../lib/apw_articles/article.rb'
+require_relative '../lib/apw_articles/category.rb'
+require_relative '../lib/apw_articles/cli.rb'
+require_relative '../lib/apw_articles/scraper.rb'

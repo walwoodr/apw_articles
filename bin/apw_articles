@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/apw-articles'
+require_relative '../lib/apw_articles.rb'
 
 APWArticles::CLI.new.run
