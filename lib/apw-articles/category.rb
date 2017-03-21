@@ -33,4 +33,19 @@ class APWArticles::Category
     end
   end
 
+  def create_category_urls(page = 1)
+    urls = []
+    i = 1 if page.between?(1,6)
+    i = 2 if page.between?(7,13)
+    i = 3 if page > 13
+    j = 1 if page.between?(1,5)
+    j = 2 if page.between?(6,12)
+    j = 3 if page > 12
+    until i > j
+      urls << "https://apracticalwedding.com/category/marriage-essays/#{self.url}/page/#{i}/?listas=list"
+      i += 1
+    end # until end
+    urls
+  end # def end
+
 end

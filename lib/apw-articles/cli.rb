@@ -13,7 +13,7 @@ class APWArticles::CLI
       print "#{index+1}.\t".colorize(:cyan)
       puts "#{category.name}"
     end # do loop end
-    puts "\nPlease choose a category by number".colorize(:blue)
+    puts "\n\nPlease choose a category by number".colorize(:blue)
     input = gets.strip
     until input.to_i > 0 && input.to_i <= APWArticles::Category.all.size
       puts "Please type a number between 1 and #{APWArticles::Category.all.size}.".colorize(:blue)
@@ -27,8 +27,7 @@ class APWArticles::CLI
   def list_articles_in_category_by_page(category, page = 1)
     articles_to_display = Array (((page*10)-10)..((page*10)-1)) # page 1 = 0-9, page 2 = 10-19
     puts "\n\n------------ Articles in #{category.name} ------------".colorize(:cyan)
-    APWArticles::Scraper.scrape_list(category.url, page) unless page.between?(2,5) || page.between?(7,12)
-    # NOTE this is very laggy and perhaps shouldn't take place here.
+    APWArticles::Article.new_from_list(APWArticles::Scraper.scrape_list(category, page)) unless page.between?(2,5) || page.between?(7,12)
     articles_to_display.each do |article_num|
       print "#{article_num+1}.\t".colorize(:cyan) unless
       category.articles[article_num] == nil
@@ -46,29 +45,27 @@ class APWArticles::CLI
       page += 1
       list_articles_in_category_by_page(category, page)
     else
-      self.article_information(
-      category.articles[input.to_i-1].url)
+      self.article_information(category.articles[input.to_i-1].url)
     end # if end
   end # list_articles_in_category_by_page def end
 
   # This method creates a new Article object from the URL passed to the method and assigns it a local variable. The method then calls instance methods for each of the object's variables (title, author, blurb, url and categories). Then it requests input to view more information or exit.
   def article_information(article_url)
     article = APWArticles::Article.new_from_url(article_url)
-    print "\nTitle:".colorize(:cyan)
-    puts "#{article.title}"
-    print "\nAuthor:".colorize(:cyan)
+    print "\n\n------------ #{article.title} ------------".colorize(:cyan)
+    print "\n\nAuthor:\t\t".colorize(:cyan)
     puts "#{article.author}"
-    print "\n\nBlurb:".colorize(:cyan)
-    puts "\"#{article.blurb}...\""
-    print "\nURL:".colorize(:cyan)
+    print "\nURL:\t\t".colorize(:cyan)
     puts "#{article_url}"
     article_categories = []
     article.categories.each do |category| # category is an object, and I want its name
       article_categories << category.name
     end # do end
-    print "\nCategories:".colorize(:cyan)
+    print "\nCategories:\t".colorize(:cyan)
     puts "#{article_categories.join(", ")}."
-    puts "Type 'list' to return to the category list page. To exit, type 'exit'".colorize(:blue)
+    print "\n\t\t\t------- Blurb -------\n\n".colorize(:cyan)
+    puts "\"#{article.blurb}...\""
+    puts "\n\nType 'list' to return to the category list page. To exit, type 'exit'".colorize(:blue)
     input = gets.strip
     # validating input
     until /(?i)exit/ === input || /(?i)list/ === input

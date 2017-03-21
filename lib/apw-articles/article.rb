@@ -7,7 +7,8 @@ class APWArticles::Article
     attribute_hash.each do |key, value|
       if key == :categories
         value.each do |category|
-          c = APWArticles::Category.find_or_create_by_url(category)
+          c = APWArticles::Category.find_or_create_by_url(category.url) if category.class == APWArticles::Category
+          c = APWArticles::Category.find_or_create_by_url(category) if category.class == String
           self.categories << c
           c.articles << self
         end
@@ -22,9 +23,11 @@ class APWArticles::Article
     self.new(APWArticles::Scraper.scrape_article(url))
   end
 
-  def self.new_from_list(list_url)
-    # call scraper for list and then initalize from hash
-  end
+  def self.new_from_list(attributes_array)
+    attributes_array.each do |attributes_hash|
+      self.new(attributes_hash)
+    end # attributes_hash do end
+  end # def end
 
   def self.all
     @@all
