@@ -15,16 +15,11 @@ class APWArticles::Scraper
   def self.scrape_article(url)
     article = {}
     doc = Nokogiri::HTML(open(url))
-    article[:title] = doc.css("h1").text
-    article[:author] = doc.css(".staff-info h2").text
-    article[:url] = url
-    article[:blurb] = doc.css(".entry p").text[0,400]
     categories = []
     doc.css(".categories a").each do |link|
       categories << link.attribute("href").value.split("/")[-1]
     end # do end
-    article[:categories] = categories
-    article
+    article = {title: doc.css("h1").text, author: doc.css(".staff-info h2").text, url: url, blurb: doc.css(".entry p").text[0,400], categories: categories}
   end # returns hash of information on the article.
 
   # This method takes in a URL of a list page of essays at APW and creates an array of all link attributes on the essay links in the list. It then breaks apart the string of link attributes and returns an array of those attributes with the preface "category-",
