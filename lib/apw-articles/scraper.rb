@@ -1,9 +1,3 @@
-require 'nokogiri'
-require 'open-uri'
-require 'colorize'
-require 'pry'
-require_relative '../apw-articles.rb'
-
 class APWArticles::Scraper
 
   # This class method defines variables i and j to determine what url number needs to be scraped based on the number of items on each page (at time of publicaion, 66 articles/page). The method then scrapes a url based on the category and URL number and uses that page's list of articles to creates a new article object per article link. Article objects include title, url and category. The method returns nil
@@ -57,5 +51,3 @@ class APWArticles::Scraper
   end # self.scrape_categories end
 
 end
-
-APWArticles::CLI.new.run
