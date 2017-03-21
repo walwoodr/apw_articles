@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
+require 'colorize'
 require 'pry'
 require_relative '../apw-articles.rb'
 
