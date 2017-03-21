@@ -6,21 +6,13 @@ require_relative '../apw-articles.rb'
 class APWArticles::Scraper
 
   def self.scrape_list(category, page = 1)
-    # # NOTE: probably I should only scrape for the # of articles I need for the given request / call - this is very laggy
-    if page.between?(1,6)
-      i = 1
-    elsif page.between?(7,13)
-      i = 2
-    else
-      i = 3
-    end
-    if page.between?(6,12)
-      j = 2
-    elsif page.between?(1,5)
-      j = 1
-    else
-      j = 3
-    end
+    # NOTE: probably I should only scrape for the # of articles I need for the given request / call - this is very laggy
+    i = 1 if page.between?(1,6)
+    i = 2 if page.between?(7,13)
+    i = 3 if page > 13
+    j = 1 if page.between?(1,5)
+    j = 2 if page.between?(6,12)
+    j = 3 if page > 12
     until i > j
       # extract the page elements with class ".type-post" and iterate over them
       Nokogiri::HTML(open("https://apracticalwedding.com/category/marriage-essays/#{category}/page/#{i}/?listas=list")).css(".type-post").each do |post|
@@ -70,7 +62,5 @@ class APWArticles::Scraper
   end # self.scrape_categories end
 
 end
-
-APWArticles::Category.create_from_url
 
 APWArticles::CLI.new.run
