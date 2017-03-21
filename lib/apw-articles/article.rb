@@ -23,9 +23,11 @@ class APWArticles::Article
     self.new(APWArticles::Scraper.scrape_article(url))
   end
 
-  def self.new_from_list(list_url)
-    # call scraper for list and then initalize from hash
-  end
+  def self.new_from_list(attributes_array)
+    attributes_array.each do |attributes_hash|
+      self.new(attributes_hash)
+    end # attributes_hash do end
+  end # def end
 
   def self.all
     @@all
