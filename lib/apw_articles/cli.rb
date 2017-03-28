@@ -57,9 +57,8 @@ class APWArticles::CLI
     puts "#{article.author}"
     print "\nURL:\t\t".colorize(:cyan)
     puts "#{article_url}"
-    article_categories = []
-    article.categories.each do |category| # category is an object, and I want its name
-      article_categories << category.name
+    article_categories = article.categories.collect do |category| # category is an object, and I want its name
+      category.name
     end # do end
     print "\nCategories:\t".colorize(:cyan)
     puts "#{article_categories.join(", ")}."
