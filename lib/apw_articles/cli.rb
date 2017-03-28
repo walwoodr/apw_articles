@@ -64,15 +64,18 @@ class APWArticles::CLI
     puts "#{article_categories.join(", ")}."
     print "\n\t\t\t------- Blurb -------\n\n".colorize(:cyan)
     puts "\"#{article.blurb}...\""
-    puts "\n\nType 'list' to return to the category list page. To exit, type 'exit'".colorize(:blue)
+    puts "\n\nType 'open' to open the article in your web browser. \nType 'list' to return to the category list page. To exit, type 'exit'".colorize(:blue)
     input = gets.strip
     # validating input
-    until /(?i)exit/ === input || /(?i)list/ === input
+    until /(?i)open/ === input ||/(?i)exit/ === input || /(?i)list/ === input
       puts "Please type 'list' or 'exit'.".colorize(:blue)
       input = gets.strip
     end # until end
     if /(?i)exit/ === input
       abort("Thank you.")
+    elsif /(?i)open/ === input
+      `open #{article_url}`
+      self.list_categories
     elsif /(?i)list/ === input
       self.list_categories
     end # if end
