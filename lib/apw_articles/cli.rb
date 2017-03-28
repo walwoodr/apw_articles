@@ -35,14 +35,21 @@ class APWArticles::CLI
       category.articles[article_num] == nil
     end # do end
     # NOTE: I might like to split out the input logic here.
-    puts "\n\nType the article number to view more information about the article. \nOr type 'next' to view the next page of articles.".colorize(:blue)
+    if page == 1
+      puts "\n\nType the article number to view more information about the article. \nOr type 'next' to view the next page of articles.".colorize(:blue)
+    else
+      puts "\n\nType the article number to view more information about the article. \nOr type 'next' or 'back' to view the next or prior page of articles.".colorize(:blue)
+    end
     input = gets.strip
-    until /(?i)next/ === input || ( input.to_i >= (articles_to_display[0]+1) && input.to_i <= (articles_to_display[-1]+1) )
-      puts "Please type a number between #{articles_to_display[0]+1} and #{articles_to_display[-1]+1} or type 'next'.".colorize(:blue)
+    until /(?i)next/ === input || /(?i)back/ === input || ( input.to_i >= (articles_to_display[0]+1) && input.to_i <= (articles_to_display[-1]+1) )
+      puts "Please type a number between #{articles_to_display[0]+1} and #{articles_to_display[-1]+1} or type 'next' or 'back'.".colorize(:blue)
       input = gets.strip
     end # until end
     if /(?i)next/ === input
       page += 1
+      list_articles_in_category_by_page(category, page)
+    elsif /(?i)back/ === input
+      page -= 1 if page > 1
       list_articles_in_category_by_page(category, page)
     else
       self.article_information(category.articles[input.to_i-1].url)
