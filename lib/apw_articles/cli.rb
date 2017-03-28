@@ -51,7 +51,7 @@ class APWArticles::CLI
 
   # This method creates a new Article object from the URL passed to the method and assigns it a local variable. The method then calls instance methods for each of the object's variables (title, author, blurb, url and categories). Then it requests input to view more information or exit.
   def article_information(article_url)
-    article = APWArticles::Article.new_from_url(article_url)
+    article = APWArticles::Article.expand_from_url(article_url)
     print "\n\n------------ #{article.title} ------------".colorize(:cyan)
     print "\n\nAuthor:\t\t".colorize(:cyan)
     puts "#{article.author}"

@@ -4,6 +4,15 @@ class APWArticles::Article
 
   def initialize(attribute_hash)
     self.categories = []
+    self.set_values_from_hash(attribute_hash)
+    @@all << self
+  end
+
+  def self.new_from_url(url)
+    self.new(APWArticles::Scraper.scrape_article(url))
+  end
+
+  def set_values_from_hash(attribute_hash)
     attribute_hash.each do |key, value|
       if key == :categories
         value.each do |category|
@@ -11,16 +20,16 @@ class APWArticles::Article
           c = APWArticles::Category.find_or_create_by_url(category) if category.class == String
           self.categories << c
           c.articles << self
-        end
+        end # value do end
       else
         self.send(("#{key}="), value)
-      end
-      @@all << self
-    end
+      end # if category end
+    end # for each in hash do end
   end
 
-  def self.new_from_url(url)
-    self.new(APWArticles::Scraper.scrape_article(url))
+  def self.expand_from_url(url)
+    attribute_hash = APWArticles::Scraper.scrape_article(url)
+    self.find_by_title(attribute_hash[:title]).tap {|article| article.set_values_from_hash(attribute_hash)}
   end
 
   def self.new_from_list(attributes_array)
@@ -31,6 +40,10 @@ class APWArticles::Article
 
   def self.all
     @@all
+  end
+
+  def self.find_by_title(title)
+    self.all.find {|article| article.title == title}
   end
 
 end
